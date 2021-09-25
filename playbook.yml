@@ -1,0 +1,11 @@
+- hosts: devserver
+  remote_user: tatsuyuki
+  tasks:
+  #- name: rootのSSHを禁止します。
+  #  lineinfile:
+  #    dest: /etc/ssh/sshd_config
+  #    regexp: "^PermitRootLogin"
+  #    insertafter: "^#PermitRootLogin"
+  #    line: "PermitRootLogin no"
+  - name: テストさん
+    command: touch test.yaml
