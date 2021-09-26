@@ -1,11 +1,21 @@
 - hosts: devserver
-  remote_user: tatsuyuki
+  vars:
+    key_file_base_name: id_rsa_{{ inventory_hostname }}
   tasks:
-  #- name: rootのSSHを禁止します。
+  - name: debug of variable for test
+    debug:
+      msg: "{{ key_file_base_name }}"
+  - name: create key pair
+    shell: echo y | ssh-keygen -t rsa -N "" -f ~/.ssh/{{ key_file_base_name }}
+  - name: register public key
+    shell: mkdir -p ~/.ssh && touch ~/.ssh/authorized_keys && chmod -R go= ~/.ssh && cat ~/.ssh/{{ key_file_base_name }}.pub >> ~/.ssh/authorized_keys
+  #- name: forbitten login of root user
   #  lineinfile:
   #    dest: /etc/ssh/sshd_config
   #    regexp: "^PermitRootLogin"
-  #    insertafter: "^#PermitRootLogin"
   #    line: "PermitRootLogin no"
-  - name: テストさん
-    command: touch test.yaml
+  #- name: invalidate password authentication
+  #  lineinfile:
+  #    dest: /etc/ssh/sshd_config
+  #    regexp: "^PasswordAuthentication"
+  #    line: "PasswordAuthentication no"
